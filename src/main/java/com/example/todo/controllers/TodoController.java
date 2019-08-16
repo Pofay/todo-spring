@@ -1,5 +1,6 @@
 package com.example.todo.controllers;
 
+import com.example.todo.entities.Todo;
 import com.example.todo.repositories.TodoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,7 @@ public class TodoController {
 
     @GetMapping(value = "/api/todos", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAllTodos() {
-        return ResponseEntity.ok().build();
+        Iterable<Todo> todo = todoRepo.findAll();
+        return ResponseEntity.ok().body(todo);
     }
-
-    
-
-
 }
