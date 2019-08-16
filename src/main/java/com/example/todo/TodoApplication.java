@@ -21,11 +21,14 @@ public class TodoApplication {
         return (args) -> {
             todoRepo.deleteAll();
 
-            for (int i =0; i<5; i++) {
-                Todo t = new Todo("Todo #"+ i);
-                todoRepo.save(t);
-            }
+            createDummyTodos(todoRepo);
         };
     }
 
+    public void createDummyTodos(TodoRepository todoRepo) {
+        for (int i = 0; i < 5; i++) {
+            Todo t = new Todo("Todo #" + i);
+            todoRepo.save(t);
+        }
+    }
 }

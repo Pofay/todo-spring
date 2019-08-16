@@ -1,8 +1,10 @@
 package com.example.todo.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.example.todo.entities.Todo;
 import com.example.todo.repositories.TodoRepository;
-
+import com.example.todo.responses.TodoJSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,19 @@ public class TodoController {
 
     @GetMapping(value = "/api/todos", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAllTodos() {
-        Iterable<Todo> todo = todoRepo.findAll();
-        return ResponseEntity.ok().body(todo);
+        Iterable<Todo> todos = todoRepo.findAll();
+        Iterable<TodoJSON> payload = transformToJson(todos);
+
+        return ResponseEntity.ok().body(payload);
+    }
+
+    private Iterable<TodoJSON> transformToJson(Iterable<Todo> todos) {
+        List<TodoJSON> payload = new ArrayList<>();
+        for (Todo t : todos) {
+            TodoJSON json = new TodoJSON(t.getId(), t.getName(), t.getStatus());
+            payload.add(json);
+        }
+
+        return payload;
     }
 }
