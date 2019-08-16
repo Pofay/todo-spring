@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.todo.entities.Todo;
 import com.example.todo.repositories.TodoRepository;
+import com.example.todo.requests.CreateTodoRequest;
 import com.example.todo.responses.TodoJSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,6 +40,20 @@ public class TodoController {
 
         return ResponseEntity.ok().body(payload);
     }
+
+    @PostMapping(value = "/api/todos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createNewTodo(@RequestBody CreateTodoRequest body) {
+        // Transform CreateTodoRequest -> Todo
+        Todo t = new Todo(body.getName());
+        t.setStatus(body.getStatus());
+        // Save to todoRepo
+        todoRepo.save(t);
+        // Transform Todo -> TodoJSON
+        TodoJSON payload = new TodoJSON(t.getId(), t.getName(), t.getStatus());
+        return ResponseEntity.status(201).body(payload);
+    }
+
+
 
     private Iterable<TodoJSON> transformToJson(Iterable<Todo> todos) {
         List<TodoJSON> payload = new ArrayList<>();
