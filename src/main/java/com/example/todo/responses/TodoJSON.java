@@ -6,6 +6,9 @@ public class TodoJSON {
     private String name;
     private String status;
 
+    public TodoJSON() {
+    }
+
     public TodoJSON(Long id, String name, String status) {
         this.setId(id);
         this.setName(name);
